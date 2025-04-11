@@ -6,7 +6,7 @@ public class PlayerInput : MonoBehaviour
 {
     // --- REFERENCIAS ---
     [SerializeField] GameManager gameManager;
-    [SerializeField] UIManager uiManager; // Añade referencia a UIManager
+    [SerializeField] UIManager uiManager;
 
     // --- ESTADO DEL INPUT ---
     private string targetPrompt = "";
@@ -16,49 +16,66 @@ public class PlayerInput : MonoBehaviour
 
     void Start()
     {
-        // Intenta encontrar referencias si no están asignadas
         if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
-        if (uiManager == null) uiManager = FindObjectOfType<UIManager>(); // Busca UIManager
+        if (uiManager == null) uiManager = FindObjectOfType<UIManager>();
     }
 
     void Update()
     {
         if (isListening)
         {
-            bool inputChanged = false; // Bandera para saber si actualizar UI
+            bool inputChanged = false;
 
             foreach (char c in Input.inputString)
             {
-                if (char.IsLetterOrDigit(c))
+
+                if (char.IsLetterOrDigit(c)) 
                 {
-                    // Comprueba si añadir el carácter excedería la longitud del prompt
                     if (currentInput.Length < targetPrompt.Length)
                     {
-                        currentInput += char.ToUpper(c); // Convierte a mayúsculas para comparar fácil
-                        inputChanged = true;
+                        // Compara directamente con el carácter esperado en mayúsculas
+                        char expectedChar = targetPrompt[currentInput.Length];
+                        char inputCharUpper = char.ToUpper(c);
 
-                        // Comprueba si la entrada actual coincide con el inicio del prompt
-                        if (targetPrompt.StartsWith(currentInput, System.StringComparison.OrdinalIgnoreCase))
+                        if (inputCharUpper == expectedChar)
                         {
-                            // Si la entrada coincide completamente
+                            // Correcto
+                            currentInput += inputCharUpper;
+                            inputChanged = true;
+
+                            // Comprueba si la entrada coincide completamente
                             if (currentInput.Length == targetPrompt.Length)
                             {
                                 float timeTaken = Time.time - startTime;
+                                // --- AQUÍ PODRÍA IR UNA ANIMACIÓN DEL JUGADOR TERMINANDO ---
+                                // uiManager.PlayPlayerFinishedTypingAnimation();
                                 gameManager.PlayerFinishedRound(timeTaken);
-                                // isListening = false; // GameManager llama a StopListening
+                                // isListening = false; // GameManager se encarga de llamar a StopListening
                             }
                         }
                         else
                         {
                             // Error de tipeo
-                            Debug.Log("Error de tipeo!");
-                            currentInput = ""; // Reinicia input
+                            Debug.Log($"Error de tipeo! Esperaba '{expectedChar}', recibió '{inputCharUpper}'");
+                            // --- AQUÍ PODRÍA IR UNA ANIMACIÓN DE ERROR (ej. shake input field) ---
+                            // uiManager.PlayTypingErrorAnimation();
+                            // Opcional: Penalización por error (ej. reiniciar input, añadir tiempo)
+                            // currentInput = ""; // Reinicia input completamente
+                            // O solo ignorar el carácter erróneo
+                            inputChanged = true; // Para actualizar UI y mostrar el error (o no si se ignora)
                         }
                     }
+                    // Ignorar input si ya se alcanzó la longitud del prompt
+                }
+                // Considerar Backspace (opcional)
+                else if (c == '\b' && currentInput.Length > 0) // Backspace
+                {
+                    currentInput = currentInput.Substring(0, currentInput.Length - 1);
+                    inputChanged = true;
                 }
             }
 
-            // Actualiza la UI solo si el input cambió en este frame
+            // Actualiza la UI solo si el input cambió
             if (inputChanged && uiManager != null)
             {
                 uiManager.UpdatePlayerRealtimeInput(currentInput);
@@ -68,21 +85,26 @@ public class PlayerInput : MonoBehaviour
 
     public void StartListening(string prompt)
     {
-        targetPrompt = prompt.ToUpper(); // Guarda prompt en mayúsculas
+        targetPrompt = prompt.ToUpper();
         currentInput = "";
         isListening = true;
         startTime = Time.time;
         if (uiManager != null) uiManager.UpdatePlayerRealtimeInput(currentInput); // Muestra input vacío inicial
+        Debug.Log("PlayerInput: Empezando a escuchar.");
     }
 
     public void StopListening()
     {
-        isListening = false;
-        // No limpiamos currentInput aquí para que se vea el resultado final
-        Debug.Log("Input detenido.");
+        if (isListening) // Solo actuar si estaba escuchando
+        {
+            isListening = false;
+            Debug.Log("PlayerInput: Detenido.");
+
+            // Podrías decidir si quieres limpiar el input aquí o dejarlo visible
+            if (uiManager != null) uiManager.UpdatePlayerRealtimeInput("");
+        }
     }
 
-    // Añade un método para obtener el input final si es necesario fuera de este script
     public string GetFinalInput()
     {
         return currentInput;

@@ -21,8 +21,6 @@ public class UIManager : MonoBehaviour
     {
         ClearRoundDisplay();
         if (messageText) messageText.text = "";
-        if (playerLivesText) playerLivesText.text = ""; 
-        if (enemyLivesText) enemyLivesText.text = "";
     }
 
     // Limpia la información específica de la ronda
@@ -83,7 +81,7 @@ public class UIManager : MonoBehaviour
     }
 
     // Muestra un mensaje
-    public void ShowMessage(string message, float duration = 0f)
+    public void ShowMessage(string message, float duration = 1f)
     {
         if (messageText)
         {
@@ -97,38 +95,22 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Muestra los tiempos finales
-    public void ShowTimes(float playerTime, float enemyTime)
-    {
-        if (playerTimeText)
-        {
-            playerTimeText.text = $"Your Time: {playerTime:F2}s";
-            playerTimeText.gameObject.SetActive(true);
-        }
-        if (enemyTimeText)
-        {
-            enemyTimeText.text = $"Enemy Time: {enemyTime:F2}s";
-            enemyTimeText.gameObject.SetActive(true);
-        }
-    }
 
-    // NUEVO: Actualiza el texto del input en tiempo real del jugador
+    //Actualiza el texto del input en tiempo real del jugador
     public void UpdatePlayerRealtimeInput(string currentInput)
     {
         if (playerRealtimeInputText)
         {
             playerRealtimeInputText.text = $"{currentInput}";
-            // No necesitamos activar/desactivar aquí si se hace en ShowPrompt
         }
     }
 
-    // NUEVO: Actualiza el texto del input simulado en tiempo real del enemigo
+    //Actualiza el texto del input simulado en tiempo real del enemigo
     public void UpdateEnemyRealtimeInput(string simulatedInput)
     {
         if (enemyRealtimeInputText)
         {
             enemyRealtimeInputText.text = $"{simulatedInput}";
-            // No necesitamos activar/desactivar aquí si se hace en ShowPrompt
         }
     }
 
@@ -142,4 +124,40 @@ public class UIManager : MonoBehaviour
             messageText.gameObject.SetActive(false);
         }
     }
+
+    public void DisplayRoundResult(float winningTime, bool isPlayerWinner)
+    {
+        // Limpia ambos campos primero para asegurar que solo uno se muestre
+        if (playerTimeText != null) playerTimeText.text = "";
+        if (enemyTimeText != null) enemyTimeText.text = "";
+
+        if (isPlayerWinner)
+        {
+            if (playerTimeText != null)
+            {
+                playerTimeText.text = $"{winningTime:F2}"; // Ejemplo con color
+                StartCoroutine(HideTextAfterDelay(playerTimeText, 2f));
+            }
+        }
+        else
+        {
+            if (enemyTimeText != null)
+            {
+                enemyTimeText.text = $"{winningTime:F2}"; // Ejemplo con color
+                StartCoroutine(HideTextAfterDelay(enemyTimeText, 2f));
+            }
+        }
+    }
+
+    // Corrutina para ocultar el texto después de un retraso
+    private IEnumerator HideTextAfterDelay(TextMeshProUGUI textElement, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (textElement != null)
+        {
+            textElement.gameObject.SetActive(false);
+        }
+    }
+
+
 }
