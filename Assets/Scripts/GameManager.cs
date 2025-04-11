@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] PlayerInput playerInput;
     [SerializeField] EnemyAI enemyAI;
     [SerializeField] PromptGenerator promptGenerator;
+    [SerializeField] SceneManager sceneManager;
 
     // --- CONFIGURACIÓN ---
     [SerializeField] int startLives = 3;
@@ -122,7 +123,7 @@ public class GameManager : MonoBehaviour
             string finalMessage = playerLives > 0 ? "You have won the duel" : "You have lost the duel";
             uiManager.ShowMessage(finalMessage, 5f);
             yield return new WaitForSeconds(5f);
-            StartGame(); // Reinicia
+            
         }
         else
         {
