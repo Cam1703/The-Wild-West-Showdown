@@ -9,11 +9,16 @@ public class SceneManager : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(sceneName))
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+            StartCoroutine(WaitForSFXAndChangeScene(0.8f, sceneName));
         }
         else
         {
             Debug.LogError("El nombre de la escena no es válido.");
         }
+    }
+    private IEnumerator WaitForSFXAndChangeScene(float delay, string sceneName)
+    {
+        yield return new WaitForSeconds(delay);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }

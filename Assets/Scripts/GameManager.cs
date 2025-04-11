@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
             string finalMessage = playerLives > 0 ? "You have won the duel" : "You have lost the duel";
             uiManager.ShowMessage(finalMessage, 5f);
             yield return new WaitForSeconds(5f);
-            
+            sceneManager.ChangeScene("Menu");
         }
         else
         {
