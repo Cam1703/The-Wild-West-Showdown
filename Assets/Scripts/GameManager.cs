@@ -68,12 +68,12 @@ public class GameManager : MonoBehaviour
         currentState = GameState.ShowingPrompt;
         currentPrompt = promptGenerator.GeneratePrompt();
         uiManager.ShowPrompt(currentPrompt); // UIManager ahora también activa los campos de input real-time
-        uiManager.ShowMessage("Ready?");
+        //uiManager.ShowMessage("Ready?");
 
         yield return new WaitForSeconds(delayAfterPrompt);
 
         currentState = GameState.WaitingInput;
-        uiManager.ShowMessage("GO");
+        //uiManager.ShowMessage("GO");
         playerFinished = false;
         playerInput.StartListening(currentPrompt);
         // Inicia la simulación del enemigo y guarda su tiempo total planeado
