@@ -22,7 +22,7 @@ public class PromptGenerator : MonoBehaviour
         }
 
         string newPrompt = promptBuilder.ToString();
-        Debug.Log($"Nuevo prompt generado: {newPrompt}");
+        //Debug.Log($"Nuevo prompt generado: {newPrompt}");
         return newPrompt;
     }
 }

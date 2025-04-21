@@ -31,7 +31,7 @@ public class EnemyAI : MonoBehaviour
 
         // Calcula y guarda el tiempo total para esta ronda
         currentRoundTotalTime = Random.Range(minReactionTime, maxReactionTime);
-        Debug.Log($"Enemigo intentará terminar en: {currentRoundTotalTime:F2}s (Prompt: {prompt})");
+        //Debug.Log($"Enemigo intentará terminar en: {currentRoundTotalTime:F2}s (Prompt: {prompt})");
 
         // Detiene cualquier simulación anterior por si acaso
         StopSimulationInternal();
@@ -90,7 +90,7 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitForSeconds(remainingTime);
         }
 
-        Debug.Log($"Enemigo terminó simulación visual para: {targetPrompt}. Tiempo total simulado ~{totalTime:F2}s");
+        //Debug.Log($"Enemigo terminó simulación visual para: {targetPrompt}. Tiempo total simulado ~{totalTime:F2}s");
         // --- AQUÍ PODRÍA IR UNA ANIMACIÓN DEL ENEMIGO TERMINANDO ---
         // uiManager.PlayEnemyFinishedTypingAnimation();
 

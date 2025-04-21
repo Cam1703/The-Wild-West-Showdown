@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
             // enemyTime se mantiene como el valor precalculado
             playerWinsRound = true; // Aseguramos que player gana si terminó primero
             enemyWinsRound = false;
-            Debug.Log($"Ronda terminada por JUGADOR en {playerTime:F2}s. Enemigo detenido.");
+            //Debug.Log($"Ronda terminada por JUGADOR en {playerTime:F2}s. Enemigo detenido.");
         }
         else if (enemyFinished && !playerFinished) // Enemigo terminó primero
         {
@@ -117,12 +117,12 @@ public class GameManager : MonoBehaviour
             // playerTime se mantiene como float.MaxValue o el tiempo parcial si se quisiera registrar
             enemyWinsRound = true; // Aseguramos que enemigo gana si terminó primero
             playerWinsRound = false;
-            Debug.Log($"Ronda terminada por ENEMIGO en {enemyTime:F2}s. Jugador detenido.");
+            //Debug.Log($"Ronda terminada por ENEMIGO en {enemyTime:F2}s. Jugador detenido.");
         }
         else if (playerFinished && enemyFinished) // Ambos terminaron en el mismo frame (raro, pero posible)
         {
             // La lógica inicial de comparación (playerTime <= enemyTime) decide el empate
-            Debug.Log($"Ronda terminada por AMBOS casi al mismo tiempo. P: {playerTime:F2}s, E: {enemyTime:F2}s");
+            //Debug.Log($"Ronda terminada por AMBOS casi al mismo tiempo. P: {playerTime:F2}s, E: {enemyTime:F2}s");
         }
 
 
@@ -135,7 +135,16 @@ public class GameManager : MonoBehaviour
             enemyLives--;
             winningTime = playerTime;
             roundResultMessage = $"You won! ({winningTime:F2}s)";
-            uiManager.DisplayRoundResult(winningTime, true); 
+            uiManager.DisplayRoundResult(winningTime, true);
+            AnimationManager.Instance.PlayPlayerShoot();
+            if (enemyLives > 0)
+            {
+                AnimationManager.Instance.PlayEnemyDamaged();
+            }
+            else
+            {
+                AnimationManager.Instance.PlayEnemyDeath();
+            }
         }
         else // Incluye el caso en que el enemigo gane (enemyWinsRound == true)
         {
@@ -143,6 +152,15 @@ public class GameManager : MonoBehaviour
             winningTime = enemyTime;
             roundResultMessage = $"Enemy won ({winningTime:F2}s)";
             uiManager.DisplayRoundResult(winningTime, false); // Muestra tiempo del enemigo como ganador
+            AnimationManager.Instance.PlayEnemyShoot();
+            if(playerLives > 0)
+            {
+                AnimationManager.Instance.PlayPlayerDamaged();
+            }
+            else
+            {
+                AnimationManager.Instance.PlayPlayerDeath();
+            }
         }
 
         uiManager.ShowMessage(roundResultMessage, delayBetweenRounds - 0.5f); // Muestra mensaje por un tiempo
@@ -161,6 +179,9 @@ public class GameManager : MonoBehaviour
             // else uiManager.PlayEnemyWinGameAnimation();
 
             uiManager.ShowMessage(finalMessage, 10f); // Muestra mensaje final más tiempo
+            
+            
+
             yield return new WaitForSeconds(10f); // Espera antes de cambiar de escena
 
             if (sceneManager != null)
@@ -189,7 +210,7 @@ public class GameManager : MonoBehaviour
         {
             playerTime = time;
             playerFinished = true;
-            Debug.Log($"PlayerInput notificó finalización en {time:F2}s");
+            //Debug.Log($"PlayerInput notificó finalización en {time:F2}s");
         }
     }
 

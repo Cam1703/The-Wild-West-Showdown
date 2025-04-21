@@ -39,6 +39,9 @@ public class UIManager : MonoBehaviour
     // Coroutine para mostrar la cuenta regresiva
     public IEnumerator CountdownCoroutine(float duration)
     {
+        AnimationManager.Instance.PlayPlayerIdle();
+        AnimationManager.Instance.PlayEnemyIdle();
+
         if (!countdownText) yield break;
         ClearRoundDisplay(); // Limpia info anterior
 
@@ -133,17 +136,20 @@ public class UIManager : MonoBehaviour
 
         if (isPlayerWinner)
         {
+
             if (playerTimeText != null)
             {
-                playerTimeText.text = $"{winningTime:F2}"; // Ejemplo con color
+                playerTimeText.text = $"{winningTime:F2}"; 
                 StartCoroutine(HideTextAfterDelay(playerTimeText, 2f));
             }
+
         }
         else
         {
+
             if (enemyTimeText != null)
             {
-                enemyTimeText.text = $"{winningTime:F2}"; // Ejemplo con color
+                enemyTimeText.text = $"{winningTime:F2}"; 
                 StartCoroutine(HideTextAfterDelay(enemyTimeText, 2f));
             }
         }

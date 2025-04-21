@@ -90,7 +90,7 @@ public class PlayerInput : MonoBehaviour
         isListening = true;
         startTime = Time.time;
         if (uiManager != null) uiManager.UpdatePlayerRealtimeInput(currentInput); // Muestra input vacío inicial
-        Debug.Log("PlayerInput: Empezando a escuchar.");
+        //Debug.Log("PlayerInput: Empezando a escuchar.");
     }
 
     public void StopListening()
@@ -98,7 +98,7 @@ public class PlayerInput : MonoBehaviour
         if (isListening) // Solo actuar si estaba escuchando
         {
             isListening = false;
-            Debug.Log("PlayerInput: Detenido.");
+            //Debug.Log("PlayerInput: Detenido.");
 
             // Podrías decidir si quieres limpiar el input aquí o dejarlo visible
             if (uiManager != null) uiManager.UpdatePlayerRealtimeInput("");
