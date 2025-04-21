@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
     {
         AnimationManager.Instance.PlayPlayerIdle();
         AnimationManager.Instance.PlayEnemyIdle();
-
+        SFXManager.Instance.PlaySound("countdown"); // Reproduce el sonido de disparo
         if (!countdownText) yield break;
         ClearRoundDisplay(); // Limpia info anterior
 

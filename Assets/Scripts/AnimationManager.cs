@@ -42,6 +42,7 @@ public class AnimationManager : MonoBehaviour
         {
             // Cambia el sprite del jugador a la posición de disparo
             playerSpriteRenderer.flipX = false;
+            SFXManager.Instance.PlaySound("shot");
             playerAnimator.SetTrigger("Player_Shoot");
             playerAnimator.SetTrigger("Player_Idle");
         }
@@ -78,6 +79,7 @@ public class AnimationManager : MonoBehaviour
         if (enemyAnimator != null)
         {
             enemySpriteRenderer.flipX = true;
+            SFXManager.Instance.PlaySound("shot");
             enemyAnimator.SetTrigger("Enemy_Shoot");
             enemyAnimator.SetTrigger("Enemy_Idle");
         }
